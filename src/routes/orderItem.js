@@ -1,6 +1,6 @@
 const express = require('express');
 const orderItemRouter = express.Router();
-const orderItemController = require('../controllers/orderItem.js');
+const orderItemController = require('../controllers/orderItemsController.js');
 
 orderItemRouter.get('/', orderItemController.getAllOrderItems);
 orderItemRouter.get('/:id', orderItemController.getOrderItemById);

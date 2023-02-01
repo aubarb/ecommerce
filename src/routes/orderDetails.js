@@ -1,6 +1,6 @@
 const express = require('express');
 const orderDetailsRouter = express.Router();
-const orderDetailsController = require('../controllers/orderDetails.js');
+const orderDetailsController = require('../controllers/orderDetailsController.js');
 
 orderDetailsRouter.get('/', orderDetailsController.getAllOrderDetails);
 orderDetailsRouter.get('/:id', orderDetailsController.getOrderDetailsById);

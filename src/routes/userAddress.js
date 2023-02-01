@@ -1,6 +1,6 @@
 const express = require('express');
 const userAddressRouter = express.Router();
-const userAddressController = require('../controllers/userAddress.js');
+const userAddressController = require('../controllers/userAddressController.js');
 
 userAddressRouter.get('/', userAddressController.getAllUserAddresses);
 userAddressRouter.get('/:id', userAddressController.getUserAddressById);

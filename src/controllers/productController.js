@@ -1,7 +1,11 @@
 const db = require('../config/db.js');
 
+
 exports.getAllProducts = (req, res) => {
-    db.query('SELECT * FROM product', (error, result) => {
+    let categoryId = req.query.category;
+    let query;
+    categoryId ? query = `SELECT * FROM product WHERE category_id = ${categoryId}` : query = 'SELECT * FROM product';
+    db.query(query, (error, result) => {
         if (error) {
             throw error
         }
@@ -20,8 +24,11 @@ exports.getProductById = (req, res) => {
 }
 
 exports.createProduct = (req, res) => {
-    const {id, name, price, description, sku, quantity, image_url, category_id} = req.body
-    db.query('INSERT INTO product (id, name, price,	description, sku, quantity, image_url, category_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [id, name, price,	description, sku, quantity, image_url, category_id], (error, results) => {
+    const {id, name, price, description, sku, quantity, category_id} = req.body
+    db.query(
+        'INSERT INTO product (id, name, price,	description, sku, quantity, category_id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [id, name, price, description, sku, quantity, category_id],
+        (error, results) => {
         if (error) {
             throw error
         }
@@ -31,10 +38,10 @@ exports.createProduct = (req, res) => {
 
 exports.updateProduct = (req, res) => {
     const id = req.params.id;
-    const {name, price, description, sku, quantity, image_url, category_id} = req.body
+    const {name, price, description, sku, quantity, category_id} = req.body
     db.query(
-        'UPDATE product SET name =$1, price = $2, description = $3, sku = $4, quantity = $5, image_url = $6, category_id = $7 WHERE id = $8',
-        [name, price, description, sku, quantity, image_url, category_id, id],
+        'UPDATE product SET name =$1, price = $2, description = $3, sku = $4, quantity = $5, category_id = $6 WHERE id = $7',
+        [name, price, description, sku, quantity, category_id, id],
         (error, results) => {
             if (error) {
                 throw error

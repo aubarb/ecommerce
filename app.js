@@ -10,11 +10,9 @@ const customerRouter = require('./src/routes/user.js')
 const customerAddressRouter = require('./src/routes/userAddress.js')
 const productRouter = require('./src/routes/product.js')
 const categoryRouter = require('./src/routes/category.js')
-const cartItemRouter = require('./src/routes/cartItem.js')
+const cartItemRouter = require('./src/routes/cart.js')
 const orderItemRouter = require('./src/routes/orderItem.js')
 const orderDetailsRouter = require('./src/routes/orderDetails.js')
-const paymentDetailsRouter = require('./src/routes/paymentDetails.js')
-const shoppingSessionRouter = require('./src/routes/shoppingSession.js')
 
 app.use((req, res, next) => {
     req.db = db
@@ -45,15 +43,13 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use('/', authRouter);
-app.use('/customer', customerRouter);
-app.use('/customer_address', customerAddressRouter);
+app.use('/user', customerRouter);
+app.use('/user_address', customerAddressRouter);
 app.use('/product', productRouter);
 app.use('/category', categoryRouter);
-app.use('/cart_item', cartItemRouter);
+app.use('/cart_items', cartItemRouter);
 app.use('/order_items', orderItemRouter);
 app.use('/order_details', orderDetailsRouter);
-app.use('/payment_details', paymentDetailsRouter);
-app.use('/shopping_session', shoppingSessionRouter);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
