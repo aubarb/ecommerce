@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const CartItems = () => {
+export default function CartItems() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('http://localhost:3000/cart_items', {
+      const result = await axios.get('http://localhost:5000/cart_items', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -14,7 +14,6 @@ const CartItems = () => {
           user_id: 1
         }
       });
-      console.log(result);
       setCartItems(result.data);
     };
     fetchData();
@@ -33,5 +32,3 @@ const CartItems = () => {
     </div>
   );
 };
-
-export default CartItems;

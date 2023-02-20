@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
     ]);
 
     if (user.rows.length !== 0) {
-      return res.status(401).send("user already exist");
+      return res.status(401).json("user already exist");
     }
 
     //Bcrypt the user password
@@ -28,13 +28,12 @@ exports.register = async (req, res) => {
 
     //generate our jwt token
     const token = jwtGenerator(newUser.rows[0].id);
-    console.log("token value:", token);
 
     //send response with token and user data
     res.json({ token, user: newUser.rows[0] });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).json("Server Error");
   }
 };
 
@@ -48,14 +47,14 @@ exports.login = async (req, res) => {
       email,
     ]);
     if (user.rows.length === 0) {
-      return res.status(401).send("User not found");
+      return res.status(401).json("User not found");
     }
 
     //check if incoming password === db password
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
     if (!validPassword) {
-      return res.status(401).send("Incorrect password");
+      return res.status(401).json("Incorrect password");
     }
 
     //give them the jwt token
@@ -72,6 +71,6 @@ exports.verify = async (req, res) => {
     res.json(true); //if it passes, means authorization middleware authorized, token is valid so we return true
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json("Server error");
   }
 };

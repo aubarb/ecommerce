@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from "react";
+import { useParams } from "react-router-dom";
 
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get('http://localhost:3000/category');
-      console.log(result);
-      setCategories(result.data);
-    };
-    fetchData();
-  }, []);
-
+export default function Category() {
+  const { name } = useParams();
   return (
-    <div>
-      <h2>Categories</h2>
-      <ul>
-        {categories.map(category => (
-          <li key={category.id}>
-            {category.name} ({category.description})
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1>{name}</h1>
+    </>
   );
-};
-
-export default Categories;
+}
