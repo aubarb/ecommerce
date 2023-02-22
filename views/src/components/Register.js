@@ -45,43 +45,57 @@ export default function Register({ setAuth }) {
 
   return (
     <>
-      <h1 className="text-center my-5">Register</h1>
-      <form onSubmit={onSubmitForm}>
-        <input
-          type="text"
-          name="first_name"
-          placeholder="First name"
-          className="form-control my-3"
-          value={first_name}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <input
-          type="text"
-          name="last_name"
-          placeholder="Last name"
-          className="form-control my-3"
-          value={last_name}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          className="form-control my-3"
-          value={email}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          className="form-control my-3"
-          value={password}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <button className="btn btn-success btn-block">Submit</button>
-      </form>
-      <Link to="/login">Already have an account? Login here</Link>
+      <h1 className="text-center my-4">Register</h1>
+      <div className="container">
+        <form onSubmit={onSubmitForm}>
+          <div className="form-floating">
+            <input
+              type="text"
+              name="first_name"
+              placeholder="First name"
+              className="form-control my-3"
+              value={first_name}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="first_name">First Name</label>
+          </div>
+          <div className="form-floating">
+            <input
+              type="text"
+              name="last_name"
+              placeholder="Last name"
+              className="form-control my-3"
+              value={last_name}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="last_name">Last Name</label>
+          </div>
+          <div className="form-floating">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="form-control my-3"
+              value={email}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="email">Email</label>
+          </div>
+          <div className="form-floating">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="form-control my-3"
+              value={password}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="password">Password</label>
+          </div>
+          <button className="btn btn-outline-success border-2 btn-block mb-2">Submit</button>
+        </form>
+        <Link to="/login">Already have an account? Login here</Link>
+      </div>
     </>
   );
 }

@@ -43,26 +43,34 @@ export default function Login({ setAuth }) {
   return (
     <>
       <h1 className="text-center my-5">Login</h1>
-      <form onSubmit={onSubmitForm}>
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          className="form-control my-3"
-          value={email}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          className="form-control my-3"
-          value={password}
-          onChange={(e) => onChange(e)}
-        ></input>
-        <button className="btn btn-success btn-block">Submit</button>
-      </form>
-      <Link to="/register">No account? Register here</Link>
+      <div className="container">
+        <form onSubmit={onSubmitForm}>
+          <div className="form-floating">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="form-control my-3"
+              value={email}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="email">Email</label>
+          </div>
+          <div className="form-floating">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="form-control my-3"
+              value={password}
+              onChange={(e) => onChange(e)}
+            ></input>
+            <label for="password">Password</label>
+          </div>
+          <button className="btn btn-outline-success border-2 btn-block mb-2">Submit</button>
+        </form>
+        <Link to="/register">No account? Register here</Link>
+      </div>
     </>
   );
 }

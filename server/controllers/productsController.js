@@ -27,11 +27,11 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-  const { name, price, description, quantity, category_id } = req.body;
+  const { name, price, description, stock, category_id } = req.body;
   try {
     await pool.query(
-      "INSERT INTO products (name, price,	description, quantity, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, price, description, quantity, category_id]
+      "INSERT INTO products (name, price,	description, stock, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [name, price, description, stock, category_id]
     );
     return res.status(201).json("Product created");
   } catch (error) {
@@ -46,10 +46,10 @@ exports.createProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, quantity, category_id } = req.body;
+    const { name, price, description, stock, category_id } = req.body;
     const result = await pool.query(
-      "UPDATE products SET name =$1, price = $2, description = $3, quantity = $4, category_id = $5 WHERE id = $6 RETURNING *",
-      [name, price, description, quantity, category_id, id]
+      "UPDATE products SET name =$1, price = $2, description = $3, stock = $4, category_id = $5 WHERE id = $6 RETURNING *",
+      [name, price, description, stock, category_id, id]
     );
     if (result.rows.length === 0) {
       return res.status(404).send("Product not found");
