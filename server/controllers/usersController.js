@@ -20,16 +20,21 @@ exports.getUserById = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  const id = req.params.id;
-  const { first_name, last_name, email } = req.body;
+  const { id } = req.params;
+  const { first_name, last_name } = req.body;
+
+  if (!first_name || !last_name) {
+    return res.status(400).json("Missing required field(s)");
+  }
+
   pool.query(
-    "UPDATE users SET first_name = $1, last_name = $2, WHERE id = $3",
+    "UPDATE users SET first_name = $1, last_name = $2 WHERE id = $3",
     [first_name, last_name, id],
     (error, results) => {
       if (error) {
         throw error;
       }
-      res.status(200).send(`User modified with ID: ${id}`);
+      results.status(200).send(`User modified with ID: ${id}`);
     }
   );
 };

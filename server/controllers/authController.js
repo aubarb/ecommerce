@@ -26,6 +26,11 @@ exports.register = async (req, res) => {
       [first_name, last_name, email, bcryptPassword]
     );
 
+    //generate the empty address associated with this user
+    pool.query("INSERT INTO user_addresses (user_id) VALUES ($1) RETURNING *", [
+      newUser.rows[0].id,
+    ]);
+
     //generate our jwt token
     const token = jwtGenerator(newUser.rows[0].id);
 
@@ -61,6 +66,51 @@ exports.login = async (req, res) => {
     const token = jwtGenerator(user.rows[0].id);
 
     res.json({ token });
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+exports.edit = async (req, res) => {
+  try {
+    //destructure req.body
+    const { currentPassword, newPassword } = req.body;
+    const { id } = req.params;
+  
+    //check if user doesn't exist, if not throw error
+    const user = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    if (user.rows.length === 0) {
+      return res.status(401).json("User not found");
+    }
+
+    //check if password was received, if not throw error
+    if (!currentPassword || !newPassword) {
+      return res.status(401).json("Missing password values");
+    }
+
+    //check if incoming password === db password
+    const validPassword = await bcrypt.compare(currentPassword, user.rows[0].password);
+
+    if (!validPassword) {
+      return res.status(401).json("Incorrect password");
+    }
+
+    //Bcrypt the user password
+    const saltRound = 10;
+    const salt = await bcrypt.genSalt(saltRound);
+    const bcryptPassword = await bcrypt.hash(newPassword, salt);
+
+    //Enter the new password in db
+    pool.query(
+      "UPDATE users SET password = $1 WHERE id = $2",
+      [bcryptPassword, id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(200).json(`Password modified for user with ID: ${id}`);
+      }
+    );
   } catch (err) {
     console.error(err.message);
   }
