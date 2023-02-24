@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { userAtom } from "../recoil/user/atom";
+import { userAddressAtom } from "../recoil/userAddress/atom";
+import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
+import { baseUrl } from "../utils/API";
 
-export default function Account({ setAuth }) {
-  const [user, setUser] = useState({});
-  const [userAddress, setUserAddress] = useState({});
+export default function Account() {
+  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
+  const [user, setUser] = useRecoilState(userAtom);
+  const [userAddress, setUserAddress] = useRecoilState(userAddressAtom);
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
@@ -13,7 +19,7 @@ export default function Account({ setAuth }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/account", {
+        const response = await fetch(`${baseUrl}/account`, {
           method: "GET",
           headers: { token: localStorage.token }, //we send the token in the header, back-end middleware receives req.header("token")
         });
@@ -30,14 +36,14 @@ export default function Account({ setAuth }) {
       }
     };
     fetchData();
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
     if (user.id) {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/user_addresses?user_id=${user.id}`
+            `${baseUrl}/user_addresses?user_id=${user.id}`
           );
           const parsRes = await response.json();
           setUserAddress({
@@ -55,7 +61,7 @@ export default function Account({ setAuth }) {
       };
       fetchData();
     }
-  }, [user.id]);
+  }, [user.id, setUserAddress]);
 
   const onChange = (e) => {
     setUser({
@@ -77,7 +83,7 @@ export default function Account({ setAuth }) {
     const { first_name, last_name } = user;
     const body = { first_name, last_name };
     try {
-      await fetch(`http://localhost:5000/users/${user.id}`, {
+      await fetch(`${baseUrl}/users/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +101,7 @@ export default function Account({ setAuth }) {
       userAddress;
     const body = { address_line1, address_line2, city, postal_code, country };
     try {
-      await fetch(`http://localhost:5000/user_addresses/${userAddress.id}`, {
+      await fetch(`${baseUrl}/user_addresses/${userAddress.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,42 +120,40 @@ export default function Account({ setAuth }) {
       toast.error("Missing fields");
     } else if (newPassword !== confirmPassword) {
       toast.error("Passwords don't match");
-    } else try {
-      const body = {
-        currentPassword: currentPassword,
-        newPassword: newPassword,
-      };
-      const response = await fetch(
-        `http://localhost:5000/auth/edit/${user.id}`,
-        {
+    } else
+      try {
+        const body = {
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        };
+        const response = await fetch(`${baseUrl}/auth/edit/${user.id}`, {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
-        }
-      );
-      const data = await response.json();
-
-      if (response.status === 401 && data === "Incorrect password") {
-        toast.error("Incorrect Password");
-      } else if (response.status === 200) {
-        toast.success("Password changed successfully!");
-        setPasswords({
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
         });
+        const data = await response.json();
+
+        if (response.status === 401 && data === "Incorrect password") {
+          toast.error("Incorrect Password");
+        } else if (response.status === 200) {
+          toast.success("Password changed successfully!");
+          setPasswords({
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+          });
+        }
+      } catch (err) {
+        console.error(err.message);
       }
-    } catch (err) {
-      console.error(err.message);
-    }
   };
 
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
-    setAuth(false);
+    setIsAuthenticated(false);
     toast.success("Logout successfully");
   };
 

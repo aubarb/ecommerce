@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSetRecoilState } from "recoil";
+import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
+import { baseUrl } from "../utils/API";
 
-export default function Login({ setAuth }) {
+export default function Login() {
+  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -18,7 +22,7 @@ export default function Login({ setAuth }) {
     e.preventDefault();
     try {
       const body = { email, password };
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,10 +33,10 @@ export default function Login({ setAuth }) {
       if (response.status === 200) {
         const parsRes = await response.json(); //We get the object containing jwToken here
         localStorage.setItem("token", parsRes.token); //We store the token in localStorage
-        setAuth(true); //We change auth state to true
+        setIsAuthenticated(true); //We change auth state to true
         toast.success("Login successfully"); //use toast for notif
       } else {
-        setAuth(false); //We change auth state to false
+        setIsAuthenticated(false); //We change auth state to false
         toast.error(await response.json()); //use toast to send custom err message defined in server side
       }
     } catch (err) {
@@ -54,7 +58,7 @@ export default function Login({ setAuth }) {
               value={email}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
           </div>
           <div className="form-floating">
             <input
@@ -65,9 +69,11 @@ export default function Login({ setAuth }) {
               value={password}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
           </div>
-          <button className="btn btn-outline-success border-2 btn-block mb-2">Submit</button>
+          <button className="btn btn-outline-success border-2 btn-block mb-2">
+            Submit
+          </button>
         </form>
         <Link to="/register">No account? Register here</Link>
       </div>

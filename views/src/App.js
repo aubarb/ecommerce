@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./App.css";
+import React, { useEffect } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+//Recoil
+import { useRecoilState, useRecoilValue } from "recoil";
+import { categoryAtom } from "./recoil/category/atom";
+import { isAuthenticatedAtom } from "./recoil/isAuthenticated/atom";
 //components
-import Home from "./components/Home";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Account from "./components/Account";
 import ProductList from "./components/ProductList";
 import CartItems from "./components/CartItems";
 import NotFound from "./components/NotFound";
+import Categories from "./components/Categories";
 //toast
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState({});
-
-  const setAuth = (boolean) => {
-    setIsAuthenticated(boolean);
-  };
+  const [isAuthenticated, setIsAuthenticated] =
+    useRecoilState(isAuthenticatedAtom);
+  const category = useRecoilValue(categoryAtom);
 
   //Checking if user is authenticated
   useEffect(() => {
@@ -39,46 +38,13 @@ function App() {
       }
     };
     verifyAuth();
-  }, []);
-
-  //Fetching the categories
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("http://localhost:5000/categories");
-      setCategories(result.data);
-    };
-    fetchData();
-  }, []);
+  }, [setIsAuthenticated]);
 
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-          <div className="nav-item dropdown">
-            <button
-              className="btn btn-primary  dropdown-toggle"
-              id="navbarDropdownMenuLink"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Categories
-            </button>
-            <ul
-              className="dropdown-menu"
-              aria-labelledby="navbarDropdownMenuLink"
-            >
-              {categories.map((category) => (
-                <li key={category.id} className="dropdown-item">
-                  <Link
-                    to={`/categories/${category.name}`}
-                    onClick={() => setCategory(category)}
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Categories />
           <button
             className="navbar-toggler"
             type="button"
@@ -97,9 +63,7 @@ function App() {
                   All Products
                 </Link>
               </li>
-              <li className="nav-item">
-                
-              </li>
+              <li className="nav-item"></li>
               <li className="nav-item">
                 <Link to="/cart_items" className="nav-link">
                   Cart
@@ -126,36 +90,18 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ProductList />} />
         <Route
           path="/login"
-          element={
-            !isAuthenticated ? (
-              <Login setAuth={setAuth} />
-            ) : (
-              <Navigate to="/account" />
-            )
-          }
+          element={!isAuthenticated ? <Login /> : <Navigate to="/account" />}
         />
         <Route
           path="/register"
-          element={
-            !isAuthenticated ? (
-              <Register setAuth={setAuth} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
+          element={!isAuthenticated ? <Register /> : <Navigate to="/login" />}
         />
         <Route
           path="/account"
-          element={
-            isAuthenticated ? (
-              <Account setAuth={setAuth} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
+          element={isAuthenticated ? <Account /> : <Navigate to="/login" />}
         />
         <Route
           path="/categories/:name"

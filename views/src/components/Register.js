@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSetRecoilState } from "recoil";
+import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
+import { baseUrl } from "../utils/API";
 
-export default function Register({ setAuth }) {
+export default function Register() {
+  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
   const [inputs, setInputs] = useState({
     first_name: "",
     last_name: "",
@@ -20,7 +24,7 @@ export default function Register({ setAuth }) {
     e.preventDefault();
     try {
       const body = { first_name, last_name, email, password };
-      const response = await fetch("http://localhost:5000/auth/register", {
+      const response = await fetch(`${baseUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,13 +35,12 @@ export default function Register({ setAuth }) {
       if (response.status === 200) {
         const parsRes = await response.json(); //We get the object containing jwToken here
         localStorage.setItem("token", parsRes.token); //We store the token in localStorage
-        setAuth(true); //We change auth state to true
+        setIsAuthenticated(true); //We change auth state to true
         toast.success("Registered successfully");
       } else {
-        setAuth(false); //We change auth state to false
-        toast.error(await response.json()); 
+        setIsAuthenticated(false); //We change auth state to false
+        toast.error(await response.json());
       }
-
     } catch (err) {
       console.error(err.message);
     }
@@ -57,7 +60,7 @@ export default function Register({ setAuth }) {
               value={first_name}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="first_name">First Name</label>
+            <label htmlFor="first_name">First Name</label>
           </div>
           <div className="form-floating">
             <input
@@ -68,7 +71,7 @@ export default function Register({ setAuth }) {
               value={last_name}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="last_name">Last Name</label>
+            <label htmlFor="last_name">Last Name</label>
           </div>
           <div className="form-floating">
             <input
@@ -79,7 +82,7 @@ export default function Register({ setAuth }) {
               value={email}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
           </div>
           <div className="form-floating">
             <input
@@ -90,9 +93,11 @@ export default function Register({ setAuth }) {
               value={password}
               onChange={(e) => onChange(e)}
             ></input>
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
           </div>
-          <button className="btn btn-outline-success border-2 btn-block mb-2">Submit</button>
+          <button className="btn btn-outline-success border-2 btn-block mb-2">
+            Submit
+          </button>
         </form>
         <Link to="/login">Already have an account? Login here</Link>
       </div>
