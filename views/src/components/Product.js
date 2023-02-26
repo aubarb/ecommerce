@@ -1,22 +1,43 @@
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../recoil/user/atom";
+import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
+import { addCartItems } from "../api/cartItems";
+import { toast } from "react-toastify";
 
-export default function Product({
-  id,
-  sku,
-  name,
-  description,
-  price,
-  stock,
-  categoryId,
-}) {
+export default function Product({ product }) {
+  const isAuthenticated = useRecoilValue(isAuthenticatedAtom);
+  const { id, name, price, description, sku, stock } = product;
   const [quantity, setQuantity] = useState(1);
+  const user = useRecoilValue(userAtom);
 
   const increment = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
   const decrement = () => {
-    if (quantity > 0) {
+    if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
+  //Sending items to the cart in DB.
+  const addToCart = async (id) => {
+    if (!isAuthenticated) {
+      toast.error("You must login first");
+    } else {
+      if (id && quantity && user.id) {
+        const response = await addCartItems(id, quantity, user.id);
+        if (response.status === 200) {
+          toast.success(
+            quantity === 1
+              ? `${quantity} ${name} added to cart!`
+              : `${quantity} ${name}s added to cart!`
+          );
+          setQuantity(1);
+        } else {
+          toast.error(response.data);
+        }
+      }
     }
   };
 
@@ -53,7 +74,8 @@ export default function Product({
                 className="form-control"
                 step="1"
                 value={quantity}
-                onChange={(event) => setQuantity(parseInt(event.target.value))}
+                onChange={(event) => setQuantity(parseInt(event.target))}
+                disabled
               />
               <div className="input-group-append">
                 <button
@@ -63,7 +85,12 @@ export default function Product({
                 >
                   +
                 </button>
-                <button className="btn btn-primary" type="button">
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  name={name}
+                  onClick={() => addToCart(id)}
+                >
                   Add to cart
                 </button>
               </div>

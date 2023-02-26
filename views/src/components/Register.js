@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
 import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
-import { baseUrl } from "../utils/API";
+import { register } from "../api/auth";
 
 export default function Register() {
   const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
@@ -22,28 +22,15 @@ export default function Register() {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    try {
-      const body = { first_name, last_name, email, password };
-      const response = await fetch(`${baseUrl}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (response.status === 200) {
-        const parsRes = await response.json(); //We get the object containing jwToken here
-        localStorage.setItem("token", parsRes.token); //We store the token in localStorage
-        setIsAuthenticated(true); //We change auth state to true
-        toast.success("Registered successfully");
-      } else {
-        setIsAuthenticated(false); //We change auth state to false
-        toast.error(await response.json());
+    const data = await register(first_name, last_name, email, password);
+    if (data.token) { //We get token back from register() call to API if it is successful
+      localStorage.setItem("token", data.token); //We store the token in localStorage
+      setIsAuthenticated(true); //We change auth state to true
+      toast.success("Registered successfully");
+    } else {
+      setIsAuthenticated(false); //We change auth state to false
+      toast.error(await data);
       }
-    } catch (err) {
-      console.error(err.message);
-    }
   };
 
   return (

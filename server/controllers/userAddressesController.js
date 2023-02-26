@@ -47,7 +47,7 @@ exports.createUserAddress = (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(201).send(`User Address created`);
+      res.status(201).json(`User Address created`);
     }
   );
 };
@@ -62,7 +62,7 @@ exports.updateUserAddress = (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).send(`User Address modified with ID: ${id}`);
+      res.status(200).json(`User Address edited`);
     }
   );
 };
@@ -76,7 +76,7 @@ exports.deleteUserAddress = (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).send(`User Address deleted with ID: ${id}`);
+      res.status(200).json(`User Address deleted`);
     }
   );
 };

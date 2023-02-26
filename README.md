@@ -1,15 +1,16 @@
 TO DO:
--continue implementing recoil:  First check setAuthentication maybe and users.
 
+- Improve the cart section to display the name, price and quantity of product and finally the total.
+- Search for product
+- Order page
+- Payment ?
 
+Extra:
 
--Search for product
--Add to cart
--Add view of product with modal ?
--Change all api call with axios ??
-
-Relire code reddit pour voir improvement possible.
-Refractor
-Use State Management tool (Redux or other?)
-Typescript
-
+- Add view of product with modal ?
+- Add view of cart similar to categories (similar to DS)
+- Login with modal view?
+- Change all api call with axios ??
+- Relire code reddit pour voir improvement possible.
+- Refractor
+- Typescript

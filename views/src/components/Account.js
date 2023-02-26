@@ -4,7 +4,8 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { userAtom } from "../recoil/user/atom";
 import { userAddressAtom } from "../recoil/userAddress/atom";
 import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
-import { baseUrl } from "../utils/API";
+import { getUser, updateUser, updateUserPassword } from "../api/user";
+import { getUserAddress, updateUserAddress } from "../api/userAddress";
 
 export default function Account() {
   const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
@@ -16,53 +17,11 @@ export default function Account() {
     confirmPassword: "",
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${baseUrl}/account`, {
-          method: "GET",
-          headers: { token: localStorage.token }, //we send the token in the header, back-end middleware receives req.header("token")
-        });
-        const parsRes = await response.json();
-        setUser({
-          id: parsRes.id,
-          first_name: parsRes.first_name,
-          last_name: parsRes.last_name,
-          email: parsRes.email,
-          password: parsRes.password,
-        });
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    fetchData();
-  }, [setUser]);
+  const { first_name, last_name, id } = user;
+  const { address_line1, address_line2, city, postal_code, country } =
+    userAddress;
 
-  useEffect(() => {
-    if (user.id) {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(
-            `${baseUrl}/user_addresses?user_id=${user.id}`
-          );
-          const parsRes = await response.json();
-          setUserAddress({
-            id: parsRes.id,
-            user_id: parsRes.user_id,
-            address_line1: parsRes.address_line1,
-            address_line2: parsRes.address_line2,
-            city: parsRes.city,
-            postal_code: parsRes.postal_code,
-            country: parsRes.country,
-          });
-        } catch (err) {
-          console.error(err.message);
-        }
-      };
-      fetchData();
-    }
-  }, [user.id, setUserAddress]);
-
+  //Editing the state based on user's inputs
   const onChange = (e) => {
     setUser({
       ...user,
@@ -78,41 +37,55 @@ export default function Account() {
     });
   };
 
+  //Getting the user info info for current user
+  useEffect(() => {
+    const fetchUser = async () => {
+      const data = await getUser();
+      setUser({
+        id: data.id,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        password: data.password,
+      });
+    };
+    fetchUser();
+  }, [setUser]);
+
+  //Send user info update
   const submitPersonalInfo = async (e) => {
     e.preventDefault();
-    const { first_name, last_name } = user;
-    const body = { first_name, last_name };
-    try {
-      await fetch(`${baseUrl}/users/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-    } catch (err) {
-      console.error(err.message);
-    }
+    const res = await updateUser(first_name, last_name, id);
+    toast.success(res);
   };
 
+  //Getting the user address info for current user
+  useEffect(() => {
+    if (id) {
+      const fetchUserAddress = async () => {
+        const data = await getUserAddress(id);
+        setUserAddress({
+          id: data.id,
+          user_id: data.user_id,
+          address_line1: data.address_line1,
+          address_line2: data.address_line2,
+          city: data.city,
+          postal_code: data.postal_code,
+          country: data.country,
+        });
+      };
+      fetchUserAddress();
+    }
+  }, [id, setUserAddress]);
+
+  //Send user address info update
   const submitAddressInfo = async (e) => {
     e.preventDefault();
-    const { address_line1, address_line2, city, postal_code, country } =
-      userAddress;
-    const body = { address_line1, address_line2, city, postal_code, country };
-    try {
-      await fetch(`${baseUrl}/user_addresses/${userAddress.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-    } catch (err) {
-      console.error(err.message);
-    }
+    const res = await updateUserAddress(userAddress.id, address_line1, address_line2, city, postal_code, country);
+    toast.success(res);
   };
 
+  //Send password update
   const submitPassword = async (e) => {
     e.preventDefault();
     const { currentPassword, newPassword, confirmPassword } = passwords;
@@ -120,35 +93,20 @@ export default function Account() {
       toast.error("Missing fields");
     } else if (newPassword !== confirmPassword) {
       toast.error("Passwords don't match");
-    } else
-      try {
-        const body = {
-          currentPassword: currentPassword,
-          newPassword: newPassword,
-        };
-        const response = await fetch(`${baseUrl}/auth/edit/${user.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
+    } else {
+      const data = await updateUserPassword(passwords, id);
+      if (data === "Incorrect password") {
+        toast.error(data);
+      } else {
+        toast.success(data);
+        setPasswords({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
         });
-        const data = await response.json();
-
-        if (response.status === 401 && data === "Incorrect password") {
-          toast.error("Incorrect Password");
-        } else if (response.status === 200) {
-          toast.success("Password changed successfully!");
-          setPasswords({
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: "",
-          });
-        }
-      } catch (err) {
-        console.error(err.message);
       }
-  };
+    };
+  }
 
   const logout = (e) => {
     e.preventDefault();

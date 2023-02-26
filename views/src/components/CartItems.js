@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { baseUrl } from "../utils/API";
+import React, { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userAtom } from "../recoil/user/atom";
+import { cartItemsAtom } from "../recoil/cartItems/atom";
+import { getCartItems } from "../api/cartItems";
 
 export default function CartItems() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useRecoilState(cartItemsAtom);
+  const user = useRecoilValue(userAtom);
 
+  //retrieving the cart from db
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`${baseUrl}/cart_items`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          user_id: 1,
-        },
-      });
-      setCartItems(result.data);
+    const fetchCartItems = async () => {
+      const data = await getCartItems(user.id);
+      setCartItems(data);
     };
-    fetchData();
-  }, []);
+    fetchCartItems();
+  }, [user.id, setCartItems]);
 
   return (
     <div>
@@ -26,10 +23,13 @@ export default function CartItems() {
       <ul>
         {cartItems.map((cartItem) => (
           <li>
-            {cartItem.product_id} Quantity: {cartItem.quanity}
+            Id {cartItem.product_id} Quantity: {cartItem.quantity}
           </li>
         ))}
       </ul>
+      <button className="btn btn-primary" onClick={() => console.log(user.id)}>
+        CONSOLE LOG USER ID
+      </button>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
 import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
-import { baseUrl } from "../utils/API";
+import { login } from "../api/auth";
 
 export default function Login() {
   const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
@@ -20,27 +20,15 @@ export default function Login() {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    try {
-      const body = { email, password };
-      const response = await fetch(`${baseUrl}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (response.status === 200) {
-        const parsRes = await response.json(); //We get the object containing jwToken here
-        localStorage.setItem("token", parsRes.token); //We store the token in localStorage
-        setIsAuthenticated(true); //We change auth state to true
-        toast.success("Login successfully"); //use toast for notif
-      } else {
-        setIsAuthenticated(false); //We change auth state to false
-        toast.error(await response.json()); //use toast to send custom err message defined in server side
-      }
-    } catch (err) {
-      console.error(err.message);
+    const data = await login(email, password); //We send password, email to login fetch api function
+    if (data.token) {
+      //If login fetch was successful response contained token
+      localStorage.setItem("token", data.token); //We store the token in localStorage
+      setIsAuthenticated(true); //We change auth state to true
+      toast.success("Login successfully"); //use toast for notif
+    } else {
+      setIsAuthenticated(false); //We change auth state to false
+      toast.error(data); //use toast to send custom err message defined in server side
     }
   };
 

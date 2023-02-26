@@ -1,24 +1,23 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState, useSetRecoilState  } from 'recoil';
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { categoryAtom } from "../recoil/category/atom";
 import { categoriesAtom } from "../recoil/categories/atom";
-import { baseUrl } from "../utils/API";
-import axios from "axios";
+import { getCategories } from "../api/categories";
 
 export default function Categories() {
-  const [categories, setCategories] = useRecoilState(categoriesAtom)
+  const [categories, setCategories] = useRecoilState(categoriesAtom);
   const setCategory = useSetRecoilState(categoryAtom);
 
   //Fetching the categories
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`${baseUrl}/categories`);
-      setCategories(result.data);
+    const fetchCategories = async () => {
+      const data = await getCategories();
+      setCategories(data);
     };
-    fetchData();
+    fetchCategories();
   }, [setCategories]);
-  
+
   return (
     <div className="nav-item dropdown">
       <button
@@ -29,10 +28,7 @@ export default function Categories() {
       >
         Categories
       </button>
-      <ul
-        className="dropdown-menu"
-        aria-labelledby="navbarDropdownMenuLink"
-      >
+      <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         {categories.map((category) => (
           <li key={category.id} className="dropdown-item">
             <Link
@@ -45,6 +41,5 @@ export default function Categories() {
         ))}
       </ul>
     </div>
-  )
-
+  );
 }
