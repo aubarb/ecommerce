@@ -6,8 +6,8 @@ export const getCartItems = async (userId) => {
     const result = await axios.get(`${baseUrl}/cart_items/${userId}`);
     const data = result.data;
     return data;
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.reponse.data);
   }
 }
 
@@ -19,7 +19,7 @@ export const addCartItems = async (id, quantity, userId) => {
     };
     const response = await axios.post(`${baseUrl}/cart_items/${userId}`, body);
     return response;
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    return(error.response.data);
   }
 };

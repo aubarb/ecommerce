@@ -1,52 +1,37 @@
 import { baseUrl } from "./baseUrl";
+import axios from "axios";
 
 export const verifyAuth = async (token) => {
   try {
-    const response = await fetch(`${baseUrl}/auth/verify`, {
-      method: "GET",
+    const response = await axios.get(`${baseUrl}/auth/verify`, {
       headers: { token: token },
     });
-    const parsRes = await response.json();
-    return parsRes;
-  } catch (err) {
-    throw new Error(`Not verified: ${err.message}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.log(error.response.data);
   }
 };
 
-export const register = async (first_name, last_name, email, password ) => {
+export const register = async (first_name, last_name, email, password) => {
   try {
     const body = { first_name, last_name, email, password };
-    const response = await fetch(`${baseUrl}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await response.json();
+    const response = await axios.post(`${baseUrl}/auth/register`, body);
+    const data = await response.data;
     console.log(data);
     return data;
-  } catch (err) {
-    throw new Error(`Failed to register: ${err.message}`);
+  } catch (error) {
+    return(error.response.data);
   }
-}
+};
 
 export const login = async (email, password) => {
   try {
     const body = { email, password };
-    const response = await fetch(`${baseUrl}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    const data = await response.json();
+    const response = await axios.post(`${baseUrl}/auth/login`, body);
+    const data = await response.data;
     return data;
-  } catch (err) {
-    throw new Error(`Failed to login: ${err.message}`);
+  } catch (error) {
+    return(error.response.data);
   }
-}
-
-
+};

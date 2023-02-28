@@ -4,10 +4,12 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { categoryAtom } from "../recoil/category/atom";
 import { categoriesAtom } from "../recoil/categories/atom";
 import { getCategories } from "../api/categories";
+import { searchAtom } from "../recoil/products/atom";
 
 export default function Categories() {
   const [categories, setCategories] = useRecoilState(categoriesAtom);
   const setCategory = useSetRecoilState(categoryAtom);
+  const setSearchTerm = useSetRecoilState(searchAtom);
 
   //Fetching the categories
   useEffect(() => {
@@ -33,7 +35,10 @@ export default function Categories() {
           <li key={category.id} className="dropdown-item">
             <Link
               to={`/categories/${category.name}`}
-              onClick={() => setCategory(category)}
+              onClick={() => {
+                setCategory(category);
+                setSearchTerm("");
+              }}
             >
               {category.name}
             </Link>

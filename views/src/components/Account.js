@@ -4,7 +4,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { userAtom } from "../recoil/user/atom";
 import { userAddressAtom } from "../recoil/userAddress/atom";
 import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
-import { getUser, updateUser, updateUserPassword } from "../api/user";
+import { updateUser, updateUserPassword } from "../api/user";
 import { getUserAddress, updateUserAddress } from "../api/userAddress";
 
 export default function Account() {
@@ -36,21 +36,6 @@ export default function Account() {
       [e.target.name]: e.target.value,
     });
   };
-
-  //Getting the user info info for current user
-  useEffect(() => {
-    const fetchUser = async () => {
-      const data = await getUser();
-      setUser({
-        id: data.id,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        password: data.password,
-      });
-    };
-    fetchUser();
-  }, [setUser]);
 
   //Send user info update
   const submitPersonalInfo = async (e) => {

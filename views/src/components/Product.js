@@ -58,44 +58,44 @@ export default function Product({ product }) {
           <p>sku:{sku}</p>
         </div>
         <div className="card-footer">
-          <form>
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={decrement}
-                >
-                  -
-                </button>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                step="1"
-                value={quantity}
-                onChange={(event) => setQuantity(parseInt(event.target))}
-                disabled
-              />
-              <div className="input-group-append">
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={increment}
-                >
-                  +
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  name={name}
-                  onClick={() => addToCart(id)}
-                >
-                  Add to cart
-                </button>
-              </div>
+        <form>
+          <div className="input-group align-item-center">
+            <div className="input-group-prepend">
+              <button
+                className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                type="button"
+                onClick={decrement}
+              >
+                -
+              </button>
             </div>
-          </form>
+            <input
+              className="form-control form-sm text-center sm my-1 p-0 rounded"
+              value={quantity}
+              onChange={(event) => setQuantity(parseInt(event.target))}
+              disabled
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                type="button"
+                onClick={increment}
+              >
+                +
+              </button>
+            </div>
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-success"
+                type="button"
+                name={name}
+                onClick={() => addToCart(id)}
+              >
+                Add to cart
+              </button>
+            </div>
+          </div>
+        </form>
         </div>
       </div>
     </>
