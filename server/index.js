@@ -14,12 +14,17 @@ const orderItemsRouter = require("./routes/orderItems.js");
 const ordersRouter = require("./routes/orders.js");
 const jwtAuthRouter = require("./routes/jwtAuth.js");
 const accountRouter = require("./routes/account");
+const checkoutRouter = require("./routes/checkout.js");
+const CheckoutController = require("./controllers/checkoutController.js");
+const bodyParser = require('body-parser');
 
 //middlewares
 app.use((req, res, next) => {
   req.db = db;
   next();
 });
+
+app.use('/webhook/stripe', bodyParser.raw({type: 'application/json'}), CheckoutController.process) // Have to put it here else issue with the parsing.
 app.use(express.json()); //enable us to access req.body
 express.urlencoded({ extended: true }); // parse incoming request payloads with url-encoded data
 app.use(cors()); //allow requests from a different domain to access the API
@@ -34,6 +39,7 @@ app.use("/order_items", orderItemsRouter);
 app.use("/orders", ordersRouter);
 app.use("/auth", jwtAuthRouter);
 app.use("/account", accountRouter);
+app.use("/checkout", checkoutRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

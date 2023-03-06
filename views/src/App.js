@@ -16,10 +16,12 @@ import ProductList from "./components/ProductList";
 import CartItems from "./components/CartItems";
 import NotFound from "./components/NotFound";
 import Categories from "./components/Categories";
+import Checkout from "./components/Checkout";
 //API calls
 import { verifyAuth } from "./api/auth";
 import { getUser } from "./api/user";
 import { searchAtom } from "./recoil/products/atom";
+import Success from "./components/Success";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] =
@@ -161,7 +163,15 @@ function App() {
           path="/cart_items"
           element={isAuthenticated ? <CartItems /> : <Navigate to="/login" />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="/checkout"
+          element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/orders/success"
+          element={<Success />}
+        />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
       <ToastContainer autoClose={2000} />
     </>

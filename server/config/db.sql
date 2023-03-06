@@ -54,7 +54,7 @@ CREATE TABLE orders (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid NOT NULL REFERENCES users(id),
   total numeric NOT NULL,
-  payment_details character varying(255),
+  payment_id character varying(255),
   created_at timestamp NOT NULL DEFAULT now(),
   modified_at timestamp NOT NULL DEFAULT now()
 );

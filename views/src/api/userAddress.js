@@ -21,7 +21,7 @@ export const updateUserAddress = async (
 ) => {
   try {
     const body = { address_line1, address_line2, city, postal_code, country };
-    const response = await axios(`${baseUrl}/user_addresses/${id}`, body);
+    const response = await axios.put(`${baseUrl}/user_addresses/${id}`, body);
     const data = await response.data;
     return data;
   } catch (error) {

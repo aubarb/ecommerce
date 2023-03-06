@@ -6,7 +6,7 @@ export const getCategories = async () => {
     const response = await axios.get(`${baseUrl}/categories`);
     const data = response.data
     return data;
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 }

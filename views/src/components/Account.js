@@ -112,7 +112,7 @@ export default function Account() {
                 type="text"
                 name="first_name"
                 onChange={(e) => onChange(e)}
-                value={user.first_name}
+                value={user.first_name || ""}
                 className="form-control"
               />
             </div>
@@ -124,7 +124,7 @@ export default function Account() {
                 type="text"
                 name="last_name"
                 onChange={(e) => onChange(e)}
-                value={user.last_name}
+                value={user.last_name || ""}
                 className="form-control"
               />
             </div>
@@ -134,7 +134,7 @@ export default function Account() {
             <div className="col-sm-4">
               <input
                 type="text"
-                value={user.email}
+                value={user.email || ""}
                 className="form-control"
                 disabled
               />
@@ -156,7 +156,7 @@ export default function Account() {
                 type="text"
                 name="address_line1"
                 onChange={(e) => onChange(e)}
-                value={userAddress.address_line1}
+                value={userAddress.address_line1 || ""}
                 className="form-control"
               />
             </div>
@@ -168,7 +168,7 @@ export default function Account() {
                 type="text"
                 name="address_line2"
                 onChange={(e) => onChange(e)}
-                value={userAddress.address_line2}
+                value={userAddress.address_line2 || ""}
                 className="form-control"
               />
             </div>
@@ -180,7 +180,7 @@ export default function Account() {
                 type="text"
                 name="city"
                 onChange={(e) => onChange(e)}
-                value={userAddress.city}
+                value={userAddress.city || ""}
                 className="form-control"
               />
             </div>
@@ -192,7 +192,7 @@ export default function Account() {
                 type="text"
                 name="postal_code"
                 onChange={(e) => onChange(e)}
-                value={userAddress.postal_code}
+                value={userAddress.postal_code || ""}
                 className="form-control"
               />
             </div>
@@ -204,7 +204,7 @@ export default function Account() {
                 type="text"
                 name="country"
                 onChange={(e) => onChange(e)}
-                value={userAddress.country}
+                value={userAddress.country || ""}
                 className="form-control"
               />
             </div>
@@ -226,7 +226,7 @@ export default function Account() {
                 className="form-control"
                 name="currentPassword"
                 onChange={(e) => onChange(e)}
-                value={passwords.currentPassword}
+                value={passwords.currentPassword || ""}
               />
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function Account() {
                 className="form-control"
                 name="newPassword"
                 onChange={(e) => onChange(e)}
-                value={passwords.newPassword}
+                value={passwords.newPassword || ""}
               />
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function Account() {
                 className="form-control"
                 name="confirmPassword"
                 onChange={(e) => onChange(e)}
-                value={passwords.confirmPassword}
+                value={passwords.confirmPassword || ""}
               />
             </div>
           </div>

@@ -8,8 +8,6 @@ export default function ProductList({ category }) {
   const [products, setProducts] = useRecoilState(productsAtom);
   const searchTerm = useRecoilValue(searchAtom)
 
-  console.log(searchTerm);
-
   useEffect(() => {
     const fethProducts = async () => {
       const data = await getProducts();
