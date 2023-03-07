@@ -5,7 +5,6 @@ import { cartItemsAtom } from "../recoil/cartItems/atom";
 import { productsAtom } from "../recoil/products/atom";
 import { getCartItems } from "../api/cartItems";
 import Checkout from "./Checkout";
-import StripeContainer from "./StripContainer";
 
 export default function CartItems() {
   const [cartItems, setCartItems] = useRecoilState(cartItemsAtom);
@@ -61,9 +60,6 @@ export default function CartItems() {
   }
 
   const renderCartItems = () => {
-    if (!cartItems) {
-      return <h1>You cart is empty!</h1>;
-    }
     return cartItems.map((cartItem) => {
       const product = products.find((p) => p.id === cartItem.product_id);
       total = total + product.price * cartItem.quantity;
@@ -117,29 +113,34 @@ export default function CartItems() {
   return (
     <div>
       <div className="container">
-        <h3 className="text-center m-4">Your cart: </h3>
-        <table className="table table-striped">
-          <thead className="bg-dark text-light">
-            <tr>
-              <th scope="col">Item</th>
-              <th scope="col">Unit Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
-              <th scope="col">Remove</th>
-            </tr>
-          </thead>
-          <tbody>{renderCartItems()}</tbody>
-          <tfoot className="bg-success text-white">
-            <tr>
-              <td colSpan="3" className="font-weight-bold">
-                Total:{" "}
-              </td>
-              <td className="font-weight-bold">${total}</td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
-        <Checkout userId={user.id}/>
+        {cartItems.length === 0
+        ? <h1 className="text-center m-5">You cart is empty!</h1>
+        :
+          <div>
+            <table className="table table-striped">
+              <thead className="bg-dark text-light">
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col">Unit Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Remove</th>
+                </tr>
+              </thead>
+              <tbody>{renderCartItems()}</tbody>
+              <tfoot className="bg-success text-white">
+                <tr>
+                  <td colSpan="3" className="font-weight-bold">
+                    Total:{" "}
+                  </td>
+                  <td className="font-weight-bold">${total}</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+            <Checkout userId={user.id}/>
+          </div>
+        }
       </div>
     </div>
   );

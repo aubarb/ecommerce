@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { userAtom } from "../recoil/user/atom";
 import { userAddressAtom } from "../recoil/userAddress/atom";
-import { isAuthenticatedAtom } from "../recoil/isAuthenticated/atom";
 import { updateUser, updateUserPassword } from "../api/user";
 import { getUserAddress, updateUserAddress } from "../api/userAddress";
 
 export default function Account() {
-  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const [userAddress, setUserAddress] = useRecoilState(userAddressAtom);
   const [passwords, setPasswords] = useState({
@@ -92,13 +90,6 @@ export default function Account() {
       }
     };
   }
-
-  const logout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    toast.success("Logout successfully");
-  };
 
   return (
     <>
@@ -261,9 +252,6 @@ export default function Account() {
             Submit
           </button>
         </form>
-        <button className="btn btn-danger" onClick={(e) => logout(e)}>
-          Logout
-        </button>
       </div>
     </>
   );

@@ -18,7 +18,7 @@ const OrdersController = {
   
   getAll: async (req, res) => {
     try {
-      const {user_id} = req.body;
+      const {user_id} = req.params;
       const orders = await OrdersModel.getAll(user_id);
       if (orders) {
         res.status(200).json(orders);

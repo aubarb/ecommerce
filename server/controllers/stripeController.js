@@ -12,8 +12,8 @@ const StripeController = {
         },
         mode: "payment",
         line_items: lineItems,
-        success_url: `${process.env.CLIENT_URL}/orders/success`, //redirecting to this route in case of success and passing the id to handle order history
-        cancel_url: `${process.env.CLIENT_URL}/cart_items`, // Can make something more customized later with error message for customer
+        success_url: `${process.env.CLIENT_URL}/orders`, //redirecting to this route in case of success and passing the id to handle order history
+        cancel_url: `${process.env.CLIENT_URL}/`, // Can make something more customized later with error message for customer
       });
       const paymentUrl = session.url;
       return paymentUrl;

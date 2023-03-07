@@ -17,11 +17,11 @@ import CartItems from "./components/CartItems";
 import NotFound from "./components/NotFound";
 import Categories from "./components/Categories";
 import Checkout from "./components/Checkout";
+import Orders from "./components/Orders";
 //API calls
 import { verifyAuth } from "./api/auth";
 import { getUser } from "./api/user";
 import { searchAtom } from "./recoil/products/atom";
-import Success from "./components/Success";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] =
@@ -65,6 +65,12 @@ function App() {
   const submitSearch = (e) => {
     e.preventDefault();
     setSearchTerm(e.target.elements.search.value);
+  };
+
+  const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
   };
 
   return (
@@ -115,9 +121,36 @@ function App() {
               {isAuthenticated ? (
                 <>
                   <li className="nav-item">
-                    <Link to="/account" className="nav-link">
-                      Account
-                    </Link>
+                    <div className="nav-item dropdown">
+                      <button
+                        className="btn dropdown-toggle"
+                        id="navbarDropdownAccountLink"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Account
+                      </button>
+                      <ul
+                        className="dropdown-menu"
+                        aria-labelledby="navbarDropdownAccountLink"
+                      >
+                        <li className="dropdown-item">
+                          <Link to="/account" className="nav-link">
+                            Profile
+                          </Link>
+                        </li>
+                        <li className="dropdown-item">
+                          <Link to="/orders" className="nav-link">
+                            Orders
+                          </Link>
+                        </li>
+                        <li className="dropdown-item">
+                          <Link className="nav-link" onClick={(e) => logout(e)}>
+                            Logout
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
                   </li>
                   <li className="nav-item">
                     <Link
@@ -164,14 +197,14 @@ function App() {
           element={isAuthenticated ? <CartItems /> : <Navigate to="/login" />}
         />
         <Route
+          path="/orders"
+          element={isAuthenticated ? <Orders /> : <Navigate to="/login" />}
+        />
+        <Route
           path="/checkout"
           element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
         />
-        <Route
-          path="/orders/success"
-          element={<Success />}
-        />
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer autoClose={2000} />
     </>

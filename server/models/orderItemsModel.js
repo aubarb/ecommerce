@@ -1,22 +1,10 @@
 const pool = require("../config/db.js");
 
 const OrderItemsModel = {
-  getAll: async () => {
+  getAll: async (order_id) => {
     try {
-      const result = await pool.query("SELECT * FROM order_items");
+      const result = await pool.query("SELECT * FROM order_items WHERE order_id = $1", [order_id]);
       return result.rows;
-    } catch (error) {
-      console.error(error.message);
-    }
-  },
-
-  getById: async (id) => {
-    try {
-      const result = await pool.query(
-        "SELECT * FROM order_items WHERE id = $1",
-        [id]
-      );
-      return result.rows[0];
     } catch (error) {
       console.error(error.message);
     }
