@@ -64,7 +64,14 @@ export default function Account() {
   //Send user address info update
   const submitAddressInfo = async (e) => {
     e.preventDefault();
-    const res = await updateUserAddress(userAddress.id, address_line1, address_line2, city, postal_code, country);
+    const res = await updateUserAddress(
+      userAddress.id,
+      address_line1,
+      address_line2,
+      city,
+      postal_code,
+      country
+    );
     toast.success(res);
   };
 
@@ -88,8 +95,8 @@ export default function Account() {
           confirmPassword: "",
         });
       }
-    };
-  }
+    }
+  };
 
   return (
     <>

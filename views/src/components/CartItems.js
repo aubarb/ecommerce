@@ -13,12 +13,14 @@ export default function CartItems() {
 
   //retrieving the cart from db
   useEffect(() => {
-    const fetchCartItems = async () => {
-      const data = await getCartItems(user.id);
-      setCartItems(data);
-    };
-    fetchCartItems();
-  }, [user.id, setCartItems]);
+    if (user.id) {
+      const fetchCartItems = async () => {
+        const data = await getCartItems(user.id);
+        setCartItems(data);
+      };
+      fetchCartItems();
+    }
+  }, [user.id]);
 
   let total = 0;
 
@@ -54,10 +56,9 @@ export default function CartItems() {
   };
   const remove = (cartItem) => {
     setCartItems(
-      cartItems.filter((item) => (item.product_id !== cartItem.product_id))
+      cartItems.filter((item) => item.product_id !== cartItem.product_id)
     );
-    
-  }
+  };
 
   const renderCartItems = () => {
     return cartItems.map((cartItem) => {
@@ -109,13 +110,12 @@ export default function CartItems() {
     });
   };
 
-
   return (
     <div>
       <div className="container">
-        {cartItems.length === 0
-        ? <h1 className="text-center m-5">You cart is empty!</h1>
-        :
+        {cartItems.length === 0 ? (
+          <h1 className="text-center m-5">You cart is empty!</h1>
+        ) : (
           <div>
             <table className="table table-striped">
               <thead className="bg-dark text-light">
@@ -138,9 +138,9 @@ export default function CartItems() {
                 </tr>
               </tfoot>
             </table>
-            <Checkout userId={user.id}/>
+            <Checkout userId={user.id} />
           </div>
-        }
+        )}
       </div>
     </div>
   );

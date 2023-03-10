@@ -10,9 +10,10 @@ const CartItemsModel = {
       );
       const existingItem = inCart.rows[0];
       if (existingItem) {
+        const newQuantity = existingItem.quantity + quantity;
         const result = await pool.query(
           "UPDATE cart_items SET quantity = $1 WHERE user_id = $2 AND product_id = $3 RETURNING *",
-          [quantity, user_id, product_id]
+          [newQuantity, user_id, product_id]
         );
         return "Product quantity updated";
       } else {

@@ -14,9 +14,8 @@ export default function Checkout({userId}) {
   }
 
   return (
-    <>
-      <h4 className="my-3">Checkout </h4>
-      <button className="btn btn-success" onClick={processCheckout}>Pay</button>
-    </>
+    <div class="d-flex justify-content-center">
+      <button className="btn btn-success btn-lg" onClick={processCheckout}>Checkout</button>
+    </div>
   )
 }

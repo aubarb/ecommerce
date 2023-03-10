@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 //toast
 import "react-toastify/dist/ReactToastify.css";
@@ -8,20 +8,20 @@ import { ToastContainer } from "react-toastify";
 import { categoryAtom } from "./recoil/category/atom";
 import { isAuthenticatedAtom } from "./recoil/isAuthenticated/atom";
 import { userAtom } from "./recoil/user/atom";
+import { productsAtom, searchAtom } from "./recoil/products/atom";
 //components
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Account from "./components/Account";
 import ProductList from "./components/ProductList";
 import CartItems from "./components/CartItems";
-import NotFound from "./components/NotFound";
 import Categories from "./components/Categories";
 import Checkout from "./components/Checkout";
 import Orders from "./components/Orders";
 //API calls
 import { verifyAuth } from "./api/auth";
 import { getUser } from "./api/user";
-import { searchAtom } from "./recoil/products/atom";
+import { getProducts } from "./api/products";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] =
@@ -29,6 +29,7 @@ function App() {
   const setUser = useSetRecoilState(userAtom);
   const category = useRecoilValue(categoryAtom);
   const setSearchTerm = useSetRecoilState(searchAtom);
+  const setProducts = useSetRecoilState(productsAtom);
 
   //Checking if user is authenticated and setting state
   useEffect(() => {
@@ -43,7 +44,7 @@ function App() {
       }
     };
     checkAuth();
-  }, [setIsAuthenticated]);
+  }, []);
 
   //Getting user info if authenticated
   useEffect(() => {
@@ -62,6 +63,15 @@ function App() {
     }
   }, [setUser, isAuthenticated]);
 
+  //Getting all products from DB
+  useEffect(() => {
+    const fethProducts = async () => {
+      const data = await getProducts();
+      setProducts(data);
+    }
+    fethProducts();
+  }, []);
+
   const submitSearch = (e) => {
     e.preventDefault();
     setSearchTerm(e.target.elements.search.value);
@@ -71,6 +81,12 @@ function App() {
     e.preventDefault();
     localStorage.removeItem("token");
     setIsAuthenticated(false);
+  };
+
+  const ProtectedRoute = ({ isAuthenticated }) => {
+    if (isAuthenticated === null) return <div>Loading...</div>;
+    if (isAuthenticated === false) return <Navigate to="/login" />;
+    return <Outlet />;
   };
 
   return (
@@ -174,6 +190,12 @@ function App() {
       </nav>
 
       <Routes>
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route path="/cart_items" element={<CartItems />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Route>
         <Route path="/" element={<ProductList />} />
         <Route path="/products" element={<ProductList />} />
         <Route
@@ -186,25 +208,10 @@ function App() {
         />
         <Route
           path="/register"
-          element={!isAuthenticated ? <Register /> : <Navigate to="/login" />}
+          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
         />
-        <Route
-          path="/account"
-          element={isAuthenticated ? <Account /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/cart_items"
-          element={isAuthenticated ? <CartItems /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/orders"
-          element={isAuthenticated ? <Orders /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/checkout"
-          element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
-        />
-        <Route path="*" element={<NotFound />} />
+
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
       <ToastContainer autoClose={2000} />
     </>

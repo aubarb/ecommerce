@@ -2,7 +2,6 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
 const StripeController = {
-
   createPayment: async (userId, lineItems) => {
     try {
       const session = await stripe.checkout.sessions.create({
@@ -24,26 +23,28 @@ const StripeController = {
 
   getPaymentInfo: async (payload, sig) => {
     try {
-      let event = await stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+      let event = await stripe.webhooks.constructEvent(
+        payload,
+        sig,
+        endpointSecret
+      );
       // Handle the checkout.session.completed event
       if (event.type === "checkout.session.completed") {
         const session = event.data.object;
         // Retrieve the session and include payment details by expanding payment_intent.
-        const sessionWithPaymentIntent = await stripe.checkout.sessions.retrieve(
-          session.id,
-          {
+        const sessionWithPaymentIntent =
+          await stripe.checkout.sessions.retrieve(session.id, {
             expand: ["payment_intent"],
-          }
-        );
+          });
 
-        const paymentIntent= sessionWithPaymentIntent.payment_intent;
+        const paymentIntent = sessionWithPaymentIntent.payment_intent;
 
         const paymentInfo = {
           paymentStatus: paymentIntent.status,
           payment_id: paymentIntent.id,
           amountReceived: paymentIntent.amount_received / 100, // convert from cents to dollars
           user_id: session.metadata.user_id,
-        }
+        };
 
         return paymentInfo;
       }
@@ -52,7 +53,6 @@ const StripeController = {
       console.error(error.message);
     }
   },
-
 };
 
 module.exports = StripeController;

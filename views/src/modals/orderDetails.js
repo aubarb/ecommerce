@@ -19,7 +19,7 @@ export default function OrderDetails({ orderId }) {
     return orderItems.map((item) => {
       const product = products.find((p) => p.id === item.product_id);
       return (
-        <tr >
+        <tr>
           <td>{product.name}</td>
           <td>${product.price}</td>
           <td>{item.quantity}</td>
@@ -27,7 +27,7 @@ export default function OrderDetails({ orderId }) {
         </tr>
       );
     });
-  }
+  };
 
   return (
     <div
@@ -41,7 +41,7 @@ export default function OrderDetails({ orderId }) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="orderDetailsModal">
-              Modal title
+              Order Details
             </h5>
             <button
               type="button"

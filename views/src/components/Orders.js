@@ -36,13 +36,13 @@ export default function Orders() {
             >
               Details
             </button>
-            <OrderDetails orderId={order.id} /> 
+            <OrderDetails orderId={order.id} />
           </td>
         </tr>
       );
     });
   };
-  
+
   return (
     <div>
       <div className="container m-5">
