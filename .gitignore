@@ -1,4 +1,5 @@
 .env
+.env.production
 server/node_modules/
 views/node_modules/
 TODO.md
