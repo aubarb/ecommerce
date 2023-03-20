@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.87890682.css",
+    "main.js": "/static/js/main.34f8ad41.js",
+    "static/media/apple.png": "/static/media/apple.825fd6d5a4b044421fd6.png",
+    "index.html": "/index.html",
+    "main.87890682.css.map": "/static/css/main.87890682.css.map",
+    "main.34f8ad41.js.map": "/static/js/main.34f8ad41.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.87890682.css",
+    "static/js/main.34f8ad41.js"
+  ]
+}

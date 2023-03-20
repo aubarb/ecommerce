@@ -15,7 +15,7 @@ const jwtAuthRouter = require("./routes/jwtAuth.js");
 const accountRouter = require("./routes/account");
 const checkoutRouter = require("./routes/checkout.js");
 const CheckoutController = require("./controllers/checkoutController.js");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 //middlewares
 app.use((req, res, next) => {
@@ -24,7 +24,11 @@ app.use((req, res, next) => {
 });
 
 app.use(cors()); //allow requests from a different domain to access the API
-app.use('/webhook/stripe', bodyParser.raw({type: 'application/json'}), CheckoutController.process) // Have to put it here else issue with the parsing.
+app.use(
+  "/webhook/stripe",
+  bodyParser.raw({ type: "application/json" }),
+  CheckoutController.process
+); // Have to put it here else issue with the parsing.
 app.use(express.json()); //enable us to access req.body
 express.urlencoded({ extended: true }); // parse incoming request payloads with url-encoded data
 

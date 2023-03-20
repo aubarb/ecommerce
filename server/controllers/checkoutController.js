@@ -38,7 +38,10 @@ const CheckoutController = {
       );
 
       //Calling the Stripe controller with the right parameters that will issue a payment link
-      const paymentUrl = await StripeController.createPayment(userId, lineItems);
+      const paymentUrl = await StripeController.createPayment(
+        userId,
+        lineItems
+      );
       res.json({ url: paymentUrl });
     } catch (error) {
       res.status(500).json(error.message);
@@ -49,6 +52,8 @@ const CheckoutController = {
     try {
       //Getting payment info from Stripe controller
       const payload = req.body;
+      const payloadString = payload.toString('utf8');
+      console.log(payload);
       const sig = req.headers["stripe-signature"];
       const paymentInfo = await StripeController.getPaymentInfo(payload, sig);
       const {

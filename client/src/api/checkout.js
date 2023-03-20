@@ -4,6 +4,7 @@ import axios from "axios";
 export const checkout = async (cartItems, userId) => {
   try {
     const body = { cartItems, userId };
+    console.log(body);
     const response = await axios.post(`${baseUrl}/checkout`, body);
     const data = await response.data;
     return data;
