@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 //toast
 import "react-toastify/dist/ReactToastify.css";
@@ -8,27 +8,26 @@ import { ToastContainer } from "react-toastify";
 import { categoryAtom } from "./recoil/category/atom";
 import { isAuthenticatedAtom } from "./recoil/isAuthenticated/atom";
 import { userAtom } from "./recoil/user/atom";
-import { productsAtom, searchAtom } from "./recoil/products/atom";
+import { productsAtom } from "./recoil/products/atom";
 //components
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Account from "./components/Account";
 import ProductList from "./components/ProductList";
 import CartItems from "./components/CartItems";
-import Categories from "./components/Categories";
 import Checkout from "./components/Checkout";
 import Orders from "./components/Orders";
 //API calls
 import { verifyAuth } from "./api/auth";
 import { getUser } from "./api/user";
 import { getProducts } from "./api/products";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] =
     useRecoilState(isAuthenticatedAtom);
   const setUser = useSetRecoilState(userAtom);
   const category = useRecoilValue(categoryAtom);
-  const setSearchTerm = useSetRecoilState(searchAtom);
   const setProducts = useSetRecoilState(productsAtom);
 
   //Checking if user is authenticated and setting state
@@ -44,7 +43,7 @@ function App() {
       }
     };
     checkAuth();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //Getting user info if authenticated
@@ -69,21 +68,10 @@ function App() {
     const fethProducts = async () => {
       const data = await getProducts();
       setProducts(data);
-    }
+    };
     fethProducts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const submitSearch = (e) => {
-    e.preventDefault();
-    setSearchTerm(e.target.elements.search.value);
-  };
-
-  const logout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-  };
 
   const ProtectedRoute = ({ isAuthenticated }) => {
     if (isAuthenticated === null) return <div>Loading...</div>;
@@ -93,104 +81,7 @@ function App() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <Categories />
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link
-                  to="/"
-                  className="nav-link"
-                  onClick={() => setSearchTerm("")}
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item"></li>
-            </ul>
-            <form
-              className="d-flex justify-content-center align-items-center"
-              onSubmit={(e) => submitSearch(e)}
-            >
-              <input
-                className="form-control me-2"
-                type="search"
-                name="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              {isAuthenticated ? (
-                <>
-                  <li className="nav-item">
-                    <div className="nav-item dropdown">
-                      <button
-                        className="btn dropdown-toggle"
-                        id="navbarDropdownAccountLink"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Account
-                      </button>
-                      <ul
-                        className="dropdown-menu"
-                        aria-labelledby="navbarDropdownAccountLink"
-                      >
-                        <li className="dropdown-item">
-                          <Link to="/account" className="nav-link">
-                            Profile
-                          </Link>
-                        </li>
-                        <li className="dropdown-item">
-                          <Link to="/orders" className="nav-link">
-                            Orders
-                          </Link>
-                        </li>
-                        <li className="dropdown-item">
-                          <Link className="nav-link" onClick={(e) => logout(e)}>
-                            Logout
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      to="/cart_items"
-                      className="nav-link btn btn-success text-white px-3"
-                    >
-                      Cart
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <li className="nav-item">
-                  <Link to="/login" className="nav-link">
-                    Login
-                  </Link>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar />
       <Routes>
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           <Route path="/cart_items" element={<CartItems />} />
@@ -212,10 +103,8 @@ function App() {
           path="/register"
           element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
         />
-
-        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={2000} style={{ top: "55px" }} />
     </>
   );
 }

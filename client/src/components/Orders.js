@@ -24,13 +24,18 @@ export default function Orders() {
     return orders.map((order) => {
       return (
         <tr key={order.id}>
-          <td>{order.id}</td>
-          <td>{order.created_at}</td>
+          <td>{order.id.substring(0, 8)}</td>
+          <td>
+            {new Date(order.created_at).toLocaleString("en-GB", {
+              dateStyle: "short",
+              timeStyle: "short",
+            })}
+          </td>
           <td>${order.total}</td>
           <td>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-outline-primary"
               data-bs-toggle="modal"
               data-bs-target={`#orderDetailsModal${order.id}`} // pass the id to the modal id
             >
@@ -49,8 +54,11 @@ export default function Orders() {
         {orders.length === 0 ? (
           <h1 className="text-center m-5">You have no orders yet!</h1>
         ) : (
-          <div>
-            <table className="table table-striped">
+          <div
+            className="container d-flex flex-column align-items-center rounded-4 shadow-lg overflow-hidden p-0 my-4"
+            style={{ maxWidth: "500px" }}
+          >
+            <table className="table table-striped text-center">
               <thead className="bg-dark text-light">
                 <tr>
                   <th scope="col">Order Id</th>

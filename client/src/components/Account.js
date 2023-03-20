@@ -100,12 +100,12 @@ export default function Account() {
 
   return (
     <>
-      <div className="container m-5">
+      <div className="container d-flex flex-column rounded-4 shadow p-4 mt-4" style={{ maxWidth: "500px" }}>
         <form onSubmit={submitPersonalInfo}>
           <h4 className="border-bottom">Personal information</h4>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">First Name</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">First Name</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="first_name"
@@ -116,8 +116,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Last Name</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Last Name</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="last_name"
@@ -128,8 +128,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Email</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Email</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 value={user.email || ""}
@@ -139,7 +139,7 @@ export default function Account() {
             </div>
           </div>
           <button
-            className="col-sm-1 btn btn-outline-primary mb-3"
+            className="col-sm-3 btn btn-outline-primary mb-3"
             type="submit"
           >
             Submit
@@ -148,8 +148,8 @@ export default function Account() {
         <form onSubmit={submitAddressInfo}>
           <h4 className="border-bottom">Address Information</h4>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Address Line 1</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Address Line 1</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="address_line1"
@@ -160,8 +160,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Address Line 2</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Address Line 2</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="address_line2"
@@ -172,8 +172,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">City</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">City</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="city"
@@ -184,8 +184,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Postal Code</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Postal Code</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="postal_code"
@@ -196,8 +196,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Country</label>
-            <div className="col-sm-4">
+            <label className="col-sm-4 col-form-label">Country</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 name="country"
@@ -208,7 +208,7 @@ export default function Account() {
             </div>
           </div>
           <button
-            className="col-sm-1 btn btn-outline-primary mb-3"
+            className="col-sm-3 btn btn-outline-primary mb-3"
             type="submit"
           >
             Submit
@@ -217,8 +217,8 @@ export default function Account() {
         <form onSubmit={submitPassword}>
           <h4 className="border-bottom">Edit Password</h4>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Current Password</label>
-            <div className="col-sm-2">
+            <label className="col-sm-4 col-form-label">Current Password</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 className="form-control"
@@ -229,8 +229,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">New Password</label>
-            <div className="col-sm-2">
+            <label className="col-sm-4 col-form-label">New Password</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 className="form-control"
@@ -241,8 +241,8 @@ export default function Account() {
             </div>
           </div>
           <div className="form-group row my-3">
-            <label className="col-sm-2 col-form-label">Confirm Password</label>
-            <div className="col-sm-2">
+            <label className="col-sm-4 col-form-label">Confirm Password</label>
+            <div className="col-sm-8">
               <input
                 type="text"
                 className="form-control"
@@ -253,7 +253,7 @@ export default function Account() {
             </div>
           </div>
           <button
-            className="col-sm-1 btn btn-outline-primary mb-3"
+            className="col-sm-3 btn btn-outline-primary mb-3"
             type="submit"
           >
             Submit

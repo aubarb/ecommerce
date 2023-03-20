@@ -33,10 +33,10 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1 className="text-center my-5">Login</h1>
-      <div className="container">
-        <form onSubmit={onSubmitForm}>
+    <div className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+      <div className="container d-flex flex-column rounded-4 shadow p-4" style={{ maxWidth: "350px" }}>
+        <h3 className="text-center m-3">Login</h3>
+        <form onSubmit={onSubmitForm} >
           <div className="form-floating">
             <input
               type="email"
@@ -65,6 +65,6 @@ export default function Login() {
         </form>
         <Link to="/register">No account? Register here</Link>
       </div>
-    </>
+    </div>
   );
 }

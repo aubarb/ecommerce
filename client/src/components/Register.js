@@ -34,9 +34,9 @@ export default function Register() {
   };
 
   return (
-    <>
-      <h1 className="text-center my-4">Register</h1>
-      <div className="container">
+    <div className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+      <div className="container d-flex flex-column rounded-4 shadow p-4" style={{ maxWidth: "350px" }}>
+        <h3 className="text-center m-3">Register</h3>
         <form onSubmit={onSubmitForm}>
           <div className="form-floating">
             <input
@@ -88,6 +88,6 @@ export default function Register() {
         </form>
         <Link to="/login">Already have an account? Login here</Link>
       </div>
-    </>
+    </div>
   );
 }

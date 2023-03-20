@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export default function Product({ product }) {
   const isAuthenticated = useRecoilValue(isAuthenticatedAtom);
-  const { id, name, price, description, sku, stock } = product;
+  const { id, name, price, description } = product;
   const [quantity, setQuantity] = useState(1);
   const user = useRecoilValue(userAtom);
 
@@ -44,7 +44,7 @@ export default function Product({ product }) {
   return (
     <>
       <div className="card">
-        <h4 className="card-header text-center">{name}</h4>
+        <h5 className="card-header text-center">{name}</h5>
         <img
           className="card-img-top img-fluid m-auto"
           style={{ width: "200px" }}
@@ -53,49 +53,47 @@ export default function Product({ product }) {
         />
         <div className="card-body">
           <span className="card-text">{description}</span>
-          <h6 className="card-text">Only {stock} remaining!</h6>
           <h5 className="card-text">$ {price}</h5>
-          <p>sku:{sku}</p>
         </div>
         <div className="card-footer">
-        <form>
-          <div className="input-group align-item-center">
-            <div className="input-group-prepend">
-              <button
-                className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
-                type="button"
-                onClick={decrement}
-              >
-                -
-              </button>
+          <form>
+            <div className="input-group align-item-center">
+              <div className="input-group-prepend">
+                <button
+                  className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                  type="button"
+                  onClick={decrement}
+                >
+                  -
+                </button>
+              </div>
+              <input
+                className="form-control form-sm text-center sm my-1 p-0 rounded"
+                value={quantity}
+                onChange={(event) => setQuantity(parseInt(event.target))}
+                disabled
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                  type="button"
+                  onClick={increment}
+                >
+                  +
+                </button>
+              </div>
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-success"
+                  type="button"
+                  name={name}
+                  onClick={() => addToCart(id)}
+                >
+                  Add to cart
+                </button>
+              </div>
             </div>
-            <input
-              className="form-control form-sm text-center sm my-1 p-0 rounded"
-              value={quantity}
-              onChange={(event) => setQuantity(parseInt(event.target))}
-              disabled
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
-                type="button"
-                onClick={increment}
-              >
-                +
-              </button>
-            </div>
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-success"
-                type="button"
-                name={name}
-                onClick={() => addToCart(id)}
-              >
-                Add to cart
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
         </div>
       </div>
     </>

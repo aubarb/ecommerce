@@ -20,6 +20,7 @@ export default function CartItems() {
       };
       fetchCartItems();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
 
   let total = 0;
@@ -72,7 +73,7 @@ export default function CartItems() {
             <div className="input-group align-item-center">
               <div className="input-group-prepend">
                 <button
-                  className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                  className="btn btn-success btn-sm border-0 text-white m-1"
                   type="button"
                   onClick={() => decrement(cartItem)}
                 >
@@ -80,14 +81,15 @@ export default function CartItems() {
                 </button>
               </div>
               <input
-                className="form-control form-sm text-center sm my-1 p-0 rounded"
+                className="form-control text-center my-1 p-0 rounded"
                 value={cartItem.quantity}
                 //onChange={(event) => setQuantity(parseInt(event.target))}
                 disabled
+                size="1"
               />
               <div className="input-group-append">
                 <button
-                  className="btn btn-outline-secondary btn-sm border-0 bg-success text-white m-1"
+                  className="btn btn-success btn-sm border-0 text-white m-1"
                   type="button"
                   onClick={() => increment(cartItem)}
                 >
@@ -99,7 +101,7 @@ export default function CartItems() {
           <td>${cartItem.quantity * product.price}</td>
           <td>
             <button
-              className="btn btn-outline-danger btn-sm"
+              className="btn btn-outline-danger btn-sm rounded-circle"
               onClick={() => remove(cartItem)}
             >
               X
@@ -112,16 +114,19 @@ export default function CartItems() {
 
   return (
     <div>
-      <div className="container">
-        {cartItems.length === 0 ? (
-          <h1 className="text-center m-5">You cart is empty!</h1>
-        ) : (
-          <div>
-            <table className="table table-striped">
+      {cartItems.length === 0 ? (
+        <h1 className="text-center m-5">You cart is empty!</h1>
+      ) : (
+        <div>
+          <div
+            className="container d-flex flex-column align-items-center rounded-4 shadow-lg overflow-hidden p-0 my-4"
+            style={{ maxWidth: "500px" }}
+          >
+            <table className="table table-striped text-center mb-0">
               <thead className="bg-dark text-light">
-                <tr>
+                <tr className="">
                   <th scope="col">Item</th>
-                  <th scope="col">Unit Price</th>
+                  <th scope="col">Price</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Total</th>
                   <th scope="col">Remove</th>
@@ -138,10 +143,10 @@ export default function CartItems() {
                 </tr>
               </tfoot>
             </table>
-            <Checkout userId={user.id} />
           </div>
-        )}
-      </div>
+          <Checkout userId={user.id} />
+        </div>
+      )}
     </div>
   );
 }
