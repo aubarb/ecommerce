@@ -13,6 +13,7 @@ export default function Navbar() {
   const submitSearch = (e) => {
     e.preventDefault();
     setSearchTerm(e.target.elements.search.value);
+    localStorage.removeItem("category");
   };
 
   const logout = (e) => {

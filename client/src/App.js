@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 //toast
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 //Atoms
-import { categoryAtom } from "./recoil/category/atom";
 import { isAuthenticatedAtom } from "./recoil/isAuthenticated/atom";
 import { userAtom } from "./recoil/user/atom";
 import { productsAtom } from "./recoil/products/atom";
@@ -22,13 +21,14 @@ import { verifyAuth } from "./api/auth";
 import { getUser } from "./api/user";
 import { getProducts } from "./api/products";
 import Navbar from "./components/Navbar";
+import { categoryAtom } from "./recoil/category/atom";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] =
     useRecoilState(isAuthenticatedAtom);
   const setUser = useSetRecoilState(userAtom);
-  const category = useRecoilValue(categoryAtom);
   const setProducts = useSetRecoilState(productsAtom);
+  const category = useRecoilValue(categoryAtom);
 
   //Checking if user is authenticated and setting state
   useEffect(() => {
