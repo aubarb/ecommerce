@@ -26,12 +26,12 @@ const ProductsModel = {
   },
 
   create: async (product) => {
-    const { name, price, description, stock, category_id } = product;
-    if (!name || !price  || !description || !stock || !category_id) throw new Error('Missing product information');
+    const { name, price, description, stock, category_id, image } = product;
+    if (!name || !price  || !description || !stock || !category_id || image) throw new Error('Missing product information');
     try {
       const result = await pool.query(
-        "INSERT INTO products (name, price, description, stock, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [name, price, description, stock, category_id]
+        "INSERT INTO products (name, price, description, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        [name, price, description, stock, category_id, image]
       );
       return result.rows[0];
     } catch (error) {
@@ -41,11 +41,11 @@ const ProductsModel = {
   },
 
   update: async (id, product) => {
-    const { name, price, description, stock, category_id } = product;
+    const { name, price, description, stock, category_id, image } = product;
     try {
       const result = await pool.query(
-        "UPDATE products SET name = $1, price = $2, description = $3, stock = $4, category_id = $5 WHERE id = $6 RETURNING *",
-        [name, price, description, stock, category_id, id]
+        "UPDATE products SET name = $1, price = $2, description = $3, stock = $4, category_id = $5, image = $6 WHERE id = $7 RETURNING *",
+        [name, price, description, stock, category_id, image, id]
       );
       if (result.rows.length === 0) {
         throw new Error("Product not found");
