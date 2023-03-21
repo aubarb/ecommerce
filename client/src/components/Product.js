@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export default function Product({ product }) {
   const isAuthenticated = useRecoilValue(isAuthenticatedAtom);
-  const { id, name, price, description } = product;
+  const { id, name, price, description, image } = product;
   const [quantity, setQuantity] = useState(1);
   const user = useRecoilValue(userAtom);
 
@@ -48,7 +48,7 @@ export default function Product({ product }) {
         <img
           className="card-img-top img-fluid m-auto"
           style={{ width: "200px" }}
-          src={require("./apple.png")}
+          src={image}
           alt={name}
         />
         <div className="card-body">
