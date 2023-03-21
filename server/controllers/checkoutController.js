@@ -52,7 +52,6 @@ const CheckoutController = {
     try {
       //Getting payment info from Stripe controller
       const payload = req.body;
-      const payloadString = payload.toString('utf8');
       console.log(payload);
       const sig = req.headers["stripe-signature"];
       const paymentInfo = await StripeController.getPaymentInfo(payload, sig);

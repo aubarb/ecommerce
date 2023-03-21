@@ -1,7 +1,6 @@
 const pool = require("../config/db.js");
 
 const CartItemsModel = {
-
   addToCart: async (user_id, product_id, quantity) => {
     try {
       const inCart = await pool.query(
@@ -27,7 +26,7 @@ const CartItemsModel = {
       console.error(error);
     }
   },
-  
+
   getAll: async (user_id) => {
     try {
       const result = await pool.query(
@@ -42,16 +41,15 @@ const CartItemsModel = {
 
   deleteAll: async (user_id) => {
     try {
-      const result = await pool.query("DELETE FROM cart_items WHERE user_id = $1", [user_id]);
-      return "Cart emptied"
+      const result = await pool.query(
+        "DELETE FROM cart_items WHERE user_id = $1",
+        [user_id]
+      );
+      return "Cart emptied";
     } catch (error) {
       console.error(error);
     }
-
-  }
-}
+  },
+};
 
 module.exports = CartItemsModel;
-
-
-

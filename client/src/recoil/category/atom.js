@@ -1,10 +1,10 @@
 import { atom } from "recoil";
-import { recoilPersist } from 'recoil-persist'
+import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist()
+const { persistAtom } = recoilPersist();
 
 export const categoryAtom = atom({
-  key: 'Category',
+  key: "Category",
   default: {},
   effects_UNSTABLE: [persistAtom],
 });
