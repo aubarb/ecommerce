@@ -1,7 +1,7 @@
 const express = require("express");
 const jwtAuthRouter = express.Router();
 const authorization = require("../middlewares/authorization");
-const validInfo = require("../middlewares/validInfo")
+const validInfo = require("../middlewares/validInfo");
 const authController = require("../controllers/authController");
 
 //register route

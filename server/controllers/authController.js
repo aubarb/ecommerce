@@ -89,7 +89,10 @@ exports.edit = async (req, res) => {
     }
 
     //check if incoming password === db password
-    const validPassword = await bcrypt.compare(currentPassword, user.rows[0].password);
+    const validPassword = await bcrypt.compare(
+      currentPassword,
+      user.rows[0].password
+    );
 
     if (!validPassword) {
       return res.status(401).json("Incorrect password");
@@ -108,7 +111,7 @@ exports.edit = async (req, res) => {
         if (error) {
           throw error;
         }
-        res.status(200).json(`Password modified for user with ID: ${id}`);
+        res.status(200).json(`Password modified successfully!`);
       }
     );
   } catch (err) {
