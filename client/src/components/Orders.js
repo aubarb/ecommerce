@@ -31,7 +31,7 @@ export default function Orders() {
               timeStyle: "short",
             })}
           </td>
-          <td>${order.total}</td>
+          <td>{Number(order.total).toFixed(2)}</td>
           <td>
             <button
               type="button"

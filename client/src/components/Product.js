@@ -43,20 +43,20 @@ export default function Product({ product }) {
 
   return (
     <>
-      <div
-        className="card"
-        type="button"
-        data-bs-toggle="modal"
-        data-bs-target={`#${id}Modal`}
-      >
+      <div className="card">
         <h5 className="card-header text-center">{name}</h5>
-        <img
-          className="card-img-top img-fluid m-auto"
-          style={{ width: "200px" }}
-          src={image}
-          alt={name}
-        />
-        <div className="card-body">
+        <div
+          className="card-body"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target={`#${id}Modal`}
+        >
+          <img
+            className="card-img-top img-fluid m-auto"
+            style={{ width: "200px" }}
+            src={image}
+            alt={name}
+          />
           <h5 className="card-text">$ {price}</h5>
         </div>
         <div className="card-footer">
