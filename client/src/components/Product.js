@@ -43,7 +43,12 @@ export default function Product({ product }) {
 
   return (
     <>
-      <div className="card">
+      <div
+        className="card"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target={`#${id}Modal`}
+      >
         <h5 className="card-header text-center">{name}</h5>
         <img
           className="card-img-top img-fluid m-auto"
@@ -52,7 +57,6 @@ export default function Product({ product }) {
           alt={name}
         />
         <div className="card-body">
-          <span className="card-text">{description}</span>
           <h5 className="card-text">$ {price}</h5>
         </div>
         <div className="card-footer">
@@ -94,6 +98,47 @@ export default function Product({ product }) {
               </div>
             </div>
           </form>
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id={`${id}Modal`}
+        tabindex="-1"
+        aria-labelledby={`${id}ModalLabel`}
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id={`${id}ModalLabel`}>
+                {name}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body d-flex flex-column align-items-center m-auto">
+              <img
+                classNameName="card-img-top img-fluid m-auto"
+                style={{ width: "200px" }}
+                src={image}
+                alt={name}
+              />
+              <p className="text-justify">{description}</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -98,7 +98,7 @@ export default function CartItems() {
               </div>
             </div>
           </td>
-          <td>${cartItem.quantity * product.price}</td>
+          <td>${(cartItem.quantity * product.price).toFixed(2)}</td>
           <td>
             <button
               className="btn btn-outline-danger btn-sm rounded-circle"
@@ -138,7 +138,7 @@ export default function CartItems() {
                   <td colSpan="3" className="font-weight-bold">
                     Total:{" "}
                   </td>
-                  <td className="font-weight-bold">${total}</td>
+                  <td className="font-weight-bold">${total.toFixed(2)}</td>
                   <td></td>
                 </tr>
               </tfoot>
